@@ -8,11 +8,17 @@ describe User do
 
     subject{ @user }
 
+    describe "remember_token" do
+        before { @user.save }
+       it { expect(@user.remember_token).not_to be_blank }
+    end
+
     it { should respond_to(:name) }
     it { should respond_to(:email) }
     it { should respond_to(:password_digest) }
     it { should respond_to(:password) }
     it { should respond_to(:password_confirmation) }
+    it { should respond_to(:remember_token) }
     it { should respond_to(:authenticate) }
 
     it { should be_valid }
