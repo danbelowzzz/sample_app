@@ -26,6 +26,7 @@ group :development, :test do
   gem 'spork-rails'
   gem 'guard-spork'
   gem 'childprocess'
+  gem 'railroady'
 end
 
 group :test do 
