@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def create 
+  def create
     @user = User.new(user_params)
     if @user.save
       sign_in @user
@@ -53,10 +53,21 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
+  def upload
+    user = User.find(params[:id])
+    if user.update_attributes(user_params)
+      flash[:success] = "File was uploaded"
+      redirect_to user
+    else
+      flash[:error] = "Error"
+      redirect_to user
+    end
+  end
+
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, documents_attributes: [:id, :content, :_destroy])
   end
 
    #Before filters
@@ -74,7 +85,7 @@ class UsersController < ApplicationController
   end
 
   def admin_user
-      redirect_to(root_url) unless current_user.admin?
-    end
+    redirect_to(root_url) unless current_user.admin?
+  end
 
 end

@@ -4,7 +4,22 @@
     <section>
      <h1>
       <%= gravatar_for @user %>
-	  <%= @user.name %>
+	    <%= @user.name %>
+      <%= nested_form_for @user, :url => upload_user_path, :html => { :multipart => true } do |f| %>
+        <%= f.fields_for :documents do |builder| %>
+          <% unless builder.object.new_record? %>
+            <%= builder.object.content.url %>
+            <%= builder.link_to_remove 'Delete this image', data: {confirm: 'You sure?'}, :class => 'btn' %>
+          <% else %>
+            <%= builder.label :content %>
+            <%= builder.file_field :content %>
+            <%= builder.link_to_remove 'remove this field' %>
+          <% end %>
+        <% end %>
+        <%= f.link_to_add 'Add image', :documents, :class => 'btn' %>
+        <%= f.submit 'submit' %>
+      <% end %>
+
      </h1>
     </section>
   </aside>

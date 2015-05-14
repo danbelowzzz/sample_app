@@ -1,10 +1,14 @@
 class User < ActiveRecord::Base
-	has_secure_password  
+	has_secure_password
+  has_many :documents, dependent: :destroy
+  accepts_nested_attributes_for :documents,:reject_if => lambda { |p| p['content'].blank? },
+    allow_destroy: true
+
 	before_save { email.downcase! }
-	before_create :create_remember_token  
+	before_create :create_remember_token
 	validates :name, presence: true, length: { maximum: 40 }
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
-	validates :email, presence: true, 
+	validates :email, presence: true,
 	          format:     { with: VALID_EMAIL_REGEX },
 	          uniqueness: { case_sensitive: false }
 	validates :password, length: { minimum: 6 }
